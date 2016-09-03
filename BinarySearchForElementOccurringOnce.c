@@ -12,7 +12,7 @@ int elementOccurringOnce(int *arr,int n)
 	     mid = low + (high - low) / 2;
 	     
 	     if(mid == 0 || mid == n-1)
-	        return arr[mid];
+	        return arr[mid]; 
 	     
 	     
 	     if(mid%2 == 1)
