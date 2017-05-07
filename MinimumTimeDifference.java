@@ -43,13 +43,12 @@ public class Solution {
                second_half[1] = second_half[1] == -1 ? 1440-(i-720+1) : second_half[1];
             if(second_half[0] != -1 && second_half[1] != -1) break;
         }
+       
         
-        //System.out.println(min_diff + " " + first_half[0] + " " + first_half[1] + " " + second_half[0] + " " + second_half[1]);
-        
-        if(first_half[0] != -1)
+        if(first_half[0] != -1 && second_half[0] != -1)
         {
-            min_diff = Math.min(min_diff,Math.abs(second_half[0] - first_half[1]));
-            min_diff = Math.min(min_diff,Math.abs(1440 + first_half[0] - second_half[1]));
+            min_diff = Math.min(min_diff,second_half[0] - first_half[1]);
+            min_diff = Math.min(min_diff,1440 + first_half[0] - second_half[1]);
         }
     
         
