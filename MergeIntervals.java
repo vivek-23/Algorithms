@@ -7,57 +7,34 @@
  *     Interval(int s, int e) { start = s; end = e; }
  * }
  */
-class SortIntervals implements Comparator<Interval>
-{
-    public int compare(Interval x,Interval y)
-    {
-        if(x.start < y.start) return -1;
-        if(x.start > y.start) return 1;
-        if(x.end > y.end) return 1;
-        if(x.end < y.end) return -1;
-        return 0;
-    }
-}
-
-public class Solution {
+class Solution {
     public List<Interval> merge(List<Interval> intervals) {
-        Collections.sort(intervals,new SortIntervals());
-        List<Interval> merged = new ArrayList<Interval>();
-        
-        int size = intervals.size();
-        int start = -1,
-            end = -1,
-            x = 0,
-            y = 0,
-            prev_x = -1,
-            prev_y = -1;
-        
-        for(int i=0;i<size;++i)
-        {
-            start = intervals.get(i).start;
-            end = intervals.get(i).end;
-            prev_x = start;
-            prev_y = end;
-            
-            for(int j=i+1;j<size;++j)
-            {
-                x = intervals.get(j).start;
-                y = intervals.get(j).end;
+        if(intervals == null || intervals.size() == 0) return new ArrayList<Interval>();
+        Collections.sort(intervals,new Comparator<Interval>(){
+            public int compare(Interval v1,Interval v2){
+                if(v1.start < v2.start) return -1;
+                else if(v1.start > v2.start) return 1;
                 
-                if(x > prev_y)
-                {
-                    i = j-1;
-                    break;
-                }
-                
-                prev_x = x;
-                prev_y = Math.max(prev_y,y);
-                i = j;
+                if(v1.end > v2.end) return -1;
+                else if(v1.end < v2.end) return 1;
+                return 0;
+            }            
+        });
+        
+        List<Interval> merged_intervals = new ArrayList<Interval>();
+        int size = intervals.size();    
+        int running_max_end = intervals.get(0).end;
+        int running_min_start = intervals.get(0).start;
+        for(int i=1;i<size;++i){
+            if(intervals.get(i).start > running_max_end){
+                merged_intervals.add(new Interval(running_min_start,running_max_end));
+                running_min_start = intervals.get(i).start;
+                running_max_end = intervals.get(i).end;                
+            }else{
+                running_max_end = Math.max(running_max_end,intervals.get(i).end);
             }
-            
-            merged.add(new Interval(start,prev_y));
         }
-        
-        return merged;
+        merged_intervals.add(new Interval(running_min_start,running_max_end));
+        return merged_intervals;
     }
 }
