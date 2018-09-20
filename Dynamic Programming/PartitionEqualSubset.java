@@ -19,6 +19,8 @@ Output: false
 
 Explanation: The array cannot be partitioned into equal sum subsets.
 */
+
+/* Approach 1 */
 class Solution {
     public boolean canPartition(int[] nums) {
         Arrays.sort(nums);
@@ -43,3 +45,33 @@ class Solution {
         return cnt >= 2;
     }
 }
+/* Approach 2 (Optimized) */
+
+class Solution {
+    public boolean canPartition(int[] nums) {
+           int sum = 0;
+        for(int x:nums) sum += x;
+        if((sum&1) != 0) return false;
+        sum >>= 1;
+        for(int i=0;i<nums.length;++i){
+            if(nums[i] > sum) return false;
+        }
+        Arrays.sort(nums);
+        int[] dp = new int[sum + 1];
+        Arrays.fill(dp,-1);
+        dp[0] = -2;
+        for(int i=0;i<nums.length;++i){
+            for(int j=1;j + nums[i] <= sum;++j){
+                if(dp[j] != i && dp[j] != -1){
+                    int next_possible_sum = j + nums[i];
+                    dp[next_possible_sum] = dp[next_possible_sum] != -1 ? dp[next_possible_sum] : i;
+                }
+            }
+            if(dp[sum] != -1 && dp[sum] != i && dp[sum-nums[i]] != -1) return true;
+            dp[nums[i]] = i;
+        }       
+        
+        return false;
+    }
+}
+
